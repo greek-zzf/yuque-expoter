@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
+import com.yuque.greek.entity.resp.Doc;
 import com.yuque.greek.entity.resp.Repo;
 import com.yuque.greek.entity.resp.Result;
 
@@ -33,6 +34,16 @@ public class YuqueClient extends AbstractClient {
     public Repo getRepoById(Integer id) {
         final String path = String.format("/repos/%s", id);
         return asObject(getRequest(path), Repo.class).getData();
+    }
+
+    public List<Doc> getDocList(Integer repoId) {
+        final String path = String.format("/repos/%s/docs", repoId);
+        return asList(getRequest(path), Doc.class).getData();
+    }
+
+    public Doc getDocDetail(Integer repoId, Integer slug) {
+        final String path = String.format("/repos/%s/docs/%s", repoId, slug);
+        return asObject(getRequest(path), Doc.class).getData();
     }
 
 

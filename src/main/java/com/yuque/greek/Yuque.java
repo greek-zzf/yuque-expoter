@@ -18,14 +18,10 @@ public class Yuque {
         properties.load(new FileReader("token.properties"));
 
         String accessToken = properties.getProperty("token");
-        YuqueClient yuqueClient = new YuqueClient("greek-zzf",accessToken);
-        List<Repo> allRepos = yuqueClient.getAllRepos();
+        YuqueClient yuqueClient = new YuqueClient("greek-zzf", accessToken);
 
-        System.out.println(allRepos);
+        System.out.println(yuqueClient.getDocList(1927824));
 
-
-        Integer id = allRepos.get(0).getId();
-
-        System.out.println(yuqueClient.getRepoById(id));
+        System.out.println(yuqueClient.getDocDetail(1927824, 97759346));
     }
 }
