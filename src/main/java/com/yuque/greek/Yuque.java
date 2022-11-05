@@ -20,6 +20,12 @@ public class Yuque {
         String accessToken = properties.getProperty("token");
         YuqueClient yuqueClient = new YuqueClient("greek-zzf",accessToken);
         List<Repo> allRepos = yuqueClient.getAllRepos();
+
+        System.out.println(allRepos);
+
+
         Integer id = allRepos.get(0).getId();
+
+        System.out.println(yuqueClient.getRepoById(id));
     }
 }

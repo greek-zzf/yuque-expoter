@@ -16,9 +16,9 @@ import java.util.List;
 public class AbstractClient {
 
 
-    private final String host;
-    private final String userId;
-    private final String accessToken;
+    final String host;
+    final String userId;
+    final String accessToken;
 
     AbstractClient(String userId, String accessToken) {
         this.accessToken = accessToken;

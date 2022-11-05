@@ -3,6 +3,8 @@ package com.yuque.greek.entity.resp;
 import com.fasterxml.jackson.annotation.JsonAlias;
 
 public class Repo {
+
+    private static final String[] STATE = new String[]{"私有", "公开"};
     private Integer id;
     private String slug;
     private String type;
@@ -12,6 +14,9 @@ public class Repo {
     private String userId;
     @JsonAlias("items_count")
     private Integer itemsCount;
+
+    @JsonAlias("public")
+    private Integer state;
 
     public Integer getId() {
         return id;
@@ -61,6 +66,14 @@ public class Repo {
         this.userId = userId;
     }
 
+    public String  getState() {
+        return STATE[state];
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
     @Override
     public String toString() {
         return "Repo{" +
@@ -70,6 +83,7 @@ public class Repo {
                 ", name='" + name + '\'' +
                 ", userId='" + userId + '\'' +
                 ", itemsCount=" + itemsCount +
+                ", state=" + getState() +
                 '}';
     }
 }

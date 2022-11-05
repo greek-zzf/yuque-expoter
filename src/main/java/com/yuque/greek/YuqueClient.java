@@ -26,12 +26,13 @@ public class YuqueClient extends AbstractClient {
     }
 
     public List<Repo> getAllRepos() {
-        return asList(getRequest("/users/greek-zzf/repos"), Repo.class).getData();
+        final String path = String.format("/users/%s/repos", userId);
+        return asList(getRequest(path), Repo.class).getData();
     }
 
     public Repo getRepoById(Integer id) {
-        return null;
-//        return getRequest("/repos/" + id);
+        final String path = String.format("/repos/%s", id);
+        return asObject(getRequest(path), Repo.class).getData();
     }
 
 
@@ -47,11 +48,11 @@ public class YuqueClient extends AbstractClient {
         return result;
     }
 
-    private <T> Result<T> asObject(String response) {
+    private <T> Result<T> asObject(String response, Class<T> klass) {
         Result<T> result;
         try {
-            result = objectMapper.readValue(response, new TypeReference<>() {
-            });
+            JavaType responseType = objectMapper.getTypeFactory().constructParametricType(Result.class, klass);
+            result = objectMapper.readValue(response, responseType);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
