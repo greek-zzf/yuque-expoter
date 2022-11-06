@@ -3,11 +3,7 @@ package com.yuque.greek;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.net.http.HttpRequest;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +24,6 @@ public class MarkdownUtil {
     }
 
     public static void downloadImage(String name, String url) {
-        System.out.println(url);
         try {
             BufferedImage read = ImageIO.read(new URL(url));
             ImageIO.write(read, "png", Path.of(name).toFile());

@@ -37,13 +37,6 @@ public class AbstractClient {
         }
     }
 
-    protected <T> T postRequest(String path, TypeReference<Result<T>> typeReference, String jsonStr) throws IOException, InterruptedException {
-        HttpRequest request = baseRequestBuilder(path).POST(HttpRequest.BodyPublishers.ofString(jsonStr))
-                .build();
-        return null;
-//        return getResponseBody(request, typeReference);
-    }
-
     private String baseRequest(HttpRequest request) throws IOException, InterruptedException {
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
