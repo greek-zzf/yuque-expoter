@@ -65,7 +65,7 @@ public class AbstractClient {
                 .build();
         try {
             return asObject(baseRequest(request), User.class).getData();
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | RuntimeException e) {
             throw new RuntimeException("获取用户信息失败，请检查 token 信息！");
         }
 

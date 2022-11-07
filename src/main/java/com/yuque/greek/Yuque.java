@@ -4,7 +4,11 @@ import com.yuque.greek.entity.resp.Repo;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -25,9 +29,36 @@ public class Yuque {
         System.out.println("所选择的仓库信息： " + YuqueClientFactory.getInstance().getRepoById(repoIds[number]));
 
 
+        String mdDownloadPath = getMdDownloadPath();
+
+        // todo: 获取图片下载路径
+
+        /*
+        * 1. 获取图片下载路径
+        * 2. 替换 md 中的下载地址
+        * 3. 开始下载 md 文件
+        * 4. 结束提示语（根据条件判断是否继续）
+        * */
         System.out.println("正在开始导出...");
+    }
 
+    private static String getMdDownloadPath() {
+        String configMdDownloadPath = System.getProperty("mdPath");
 
+        if (Objects.isNull(configMdDownloadPath) || Files.isDirectory(Path.of(configMdDownloadPath))) {
+            System.out.println("未配置 md 文件下载路径或路径无效！请输入 md 下载路径: ");
+
+            Scanner scanner = new Scanner(System.in);
+            String mdDownloadPath = scanner.next();
+            while (!Files.isDirectory(Path.of(mdDownloadPath))) {
+                scanner = new Scanner("请重新输入 md 下载路径: ");
+                mdDownloadPath = scanner.next();
+            }
+
+            return mdDownloadPath;
+        }
+
+        return configMdDownloadPath;
     }
 
     private static void printRepoList() {
@@ -38,7 +69,7 @@ public class Yuque {
         int count = 1;
         repoIds = new int[allRepos.size() + 1];
         for (Repo repo : allRepos) {
-            builder.append("\n" + count +". "+ repo.getName());
+            builder.append("\n" + count + ". " + repo.getName());
             repoIds[count++] = repo.getId();
         }
 
