@@ -1,25 +1,19 @@
 package com.yuque.greek;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yuque.greek.entity.resp.Doc;
 import com.yuque.greek.entity.resp.Repo;
-import com.yuque.greek.entity.resp.Result;
 
 import java.util.List;
 
 public class YuqueClient extends AbstractClient {
 
-    private final ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    YuqueClient(String userId, String accessToken) {
-        super(userId, accessToken);
+    YuqueClient(String accessToken) {
+        super(accessToken);
     }
 
     public List<Repo> getAllRepos() {
-        final String path = String.format("/users/%s/repos", userId);
+        final String path = String.format("/users/%s/repos", currentUser.getId());
         return asList(getRequest(path), Repo.class).getData();
     }
 
@@ -39,26 +33,4 @@ public class YuqueClient extends AbstractClient {
     }
 
 
-    private <T> Result<List<T>> asList(String response, Class<T> klass) {
-        Result<List<T>> result;
-        try {
-            JavaType beanType = objectMapper.getTypeFactory().constructCollectionType(List.class, klass);
-            JavaType responseType = objectMapper.getTypeFactory().constructParametricType(Result.class, beanType);
-            result = objectMapper.readValue(response, responseType);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return result;
-    }
-
-    private <T> Result<T> asObject(String response, Class<T> klass) {
-        Result<T> result;
-        try {
-            JavaType responseType = objectMapper.getTypeFactory().constructParametricType(Result.class, klass);
-            result = objectMapper.readValue(response, responseType);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return result;
-    }
 }

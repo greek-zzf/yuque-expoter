@@ -1,27 +1,20 @@
 package com.yuque.greek;
 
-import com.yuque.greek.entity.resp.Doc;
 import com.yuque.greek.entity.resp.Repo;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Yuque {
 
     private static int[] repoIds;
 
-    public static void main(String[] args){
+    private static final YuqueClient client = YuqueClientFactory.initClient(getToken());
 
-        YuqueClientFactory.initClient("greek-zzf", getToken());
+    public static void main(String[] args) {
 
         printRepoList();
 
@@ -38,14 +31,14 @@ public class Yuque {
     }
 
     private static void printRepoList() {
-        List<Repo> allRepos = YuqueClientFactory.getInstance().getAllRepos();
-        StringBuilder builder = new StringBuilder("——————————————————————")
-                .append("\n根据序号选择要导出的仓库");
+        List<Repo> allRepos = client.getAllRepos();
+        StringBuilder builder = new StringBuilder("Hello " + client.currentUser.getName() + ", 根据序号选择要导出的仓库")
+                .append("\n——————————————————————");
 
         int count = 1;
         repoIds = new int[allRepos.size() + 1];
         for (Repo repo : allRepos) {
-            builder.append("\n[" + count + "]" + repo.getName());
+            builder.append("\n" + count +". "+ repo.getName());
             repoIds[count++] = repo.getId();
         }
 

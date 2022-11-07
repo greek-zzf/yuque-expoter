@@ -8,7 +8,8 @@ public class YuqueClientFactory {
         return client;
     }
 
-    public static void initClient(String userId, String token) {
-        client = new YuqueClient(userId, token);
+    public static YuqueClient initClient(String token) {
+        client = new YuqueClient(token);
+        return client;
     }
 }
