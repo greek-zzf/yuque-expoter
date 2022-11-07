@@ -1,9 +1,13 @@
 package com.yuque.greek;
 
+import com.yuque.greek.entity.resp.Doc;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +27,30 @@ public class MarkdownUtil {
         return result;
     }
 
-    public static void downloadImage(String name, String url) {
+    public static void downloadMd(Doc doc, Path mdPath, Path picPath) {
+        String markdown = doc.getMarkdownContent();
+        List<Image> allImage = getAllImage(markdown);
+
+        String picSavePath;
+        for (Image image : allImage) {
+            picSavePath = picPath + File.separator + image.getName();
+            downloadImage(image.getUrl(), picSavePath);
+
+            markdown = markdown.replace(image.getUrl(), picSavePath);
+        }
+
+        try {
+            Files.writeString(Path.of(mdPath + File.separator + doc.getTitle() + ".md"), markdown);
+        } catch (IOException e) {
+            throw new RuntimeException("下载 md 文件失败！");
+        }
+    }
+
+    public static void downloadImage(String url, String picSavePath) {
+        System.out.println(picSavePath);
         try {
             BufferedImage read = ImageIO.read(new URL(url));
-            ImageIO.write(read, "png", Path.of(name).toFile());
+            ImageIO.write(read, "png", Path.of(picSavePath).toFile());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

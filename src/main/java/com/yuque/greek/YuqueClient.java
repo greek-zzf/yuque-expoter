@@ -27,7 +27,7 @@ public class YuqueClient extends AbstractClient {
         return asList(getRequest(path), Doc.class).getData();
     }
 
-    public Doc getDocDetail(Integer repoId, Integer slug) {
+    public Doc getDocDetail(Integer repoId, String slug) {
         final String path = String.format("/repos/%s/docs/%s", repoId, slug);
         return asObject(getRequest(path), Doc.class).getData();
     }
