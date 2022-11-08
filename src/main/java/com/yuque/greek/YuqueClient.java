@@ -1,12 +1,11 @@
 package com.yuque.greek;
 
-import com.yuque.greek.entity.resp.Doc;
-import com.yuque.greek.entity.resp.Repo;
+import com.yuque.greek.entity.Doc;
+import com.yuque.greek.entity.Repo;
 
 import java.util.List;
 
 public class YuqueClient extends AbstractClient {
-
 
     YuqueClient(String accessToken) {
         super(accessToken);

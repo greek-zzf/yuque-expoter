@@ -1,6 +1,6 @@
 package com.yuque.greek;
 
-import com.yuque.greek.entity.resp.Doc;
+import com.yuque.greek.entity.Doc;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -31,26 +31,34 @@ public class MarkdownUtil {
         String markdown = doc.getMarkdownContent();
         List<Image> allImage = getAllImage(markdown);
 
-        String picSavePath;
+        Path picSavePath;
         for (Image image : allImage) {
-            picSavePath = picPath + File.separator + image.getName();
+            picSavePath = Path.of(picPath.toString(), File.separator, doc.getTitle().replaceAll(" ", ""), File.separator, image.getName());
+
+            if (!Files.exists(picSavePath.getParent())) {
+                try {
+                    Files.createDirectory(picSavePath.getParent());
+                } catch (IOException e) {
+                    throw new RuntimeException("创建图片保存路径 " + picSavePath.getParent() + " 失败！");
+                }
+            }
             downloadImage(image.getUrl(), picSavePath);
 
-            markdown = markdown.replace(image.getUrl(), picSavePath);
+            markdown = markdown.replace(image.getUrl(), picSavePath.toString());
         }
 
         try {
             Files.writeString(Path.of(mdPath + File.separator + doc.getTitle() + ".md"), markdown);
+            System.out.println("导出: " + doc.getTitle() + "成功!");
         } catch (IOException e) {
             throw new RuntimeException("下载 md 文件失败！");
         }
     }
 
-    public static void downloadImage(String url, String picSavePath) {
-        System.out.println(picSavePath);
+    public static void downloadImage(String url, Path picSavePath) {
         try {
             BufferedImage read = ImageIO.read(new URL(url));
-            ImageIO.write(read, "png", Path.of(picSavePath).toFile());
+            ImageIO.write(read, "png", picSavePath.toFile());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -66,16 +74,8 @@ public class MarkdownUtil {
             return name;
         }
 
-        public void setName(String name) {
-            this.name = name;
-        }
-
         public String getUrl() {
             return url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
         }
 
         public Image(String name, String url) {

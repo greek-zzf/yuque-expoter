@@ -1,4 +1,4 @@
-package com.yuque.greek.entity.resp;
+package com.yuque.greek.entity;
 
 public class Result<T> {
 

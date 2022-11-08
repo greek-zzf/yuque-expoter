@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yuque.greek.entity.resp.Result;
-import com.yuque.greek.entity.resp.User;
+import com.yuque.greek.entity.Result;
+import com.yuque.greek.entity.User;
 
 import java.io.IOException;
 import java.net.URI;

@@ -2,7 +2,7 @@ package com.yuque.greek;
 
 public class YuqueClientFactory {
 
-    private static YuqueClient client;
+    private static  YuqueClient client;
 
     public static YuqueClient getInstance() {
         return client;
