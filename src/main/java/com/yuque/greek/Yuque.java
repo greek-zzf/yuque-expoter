@@ -20,7 +20,7 @@ public class Yuque {
 
     private static Path picDownloadPath = Path.of(mdDownloadPath.toString(), File.separator + "picture");
 
-    private static final YuqueClient client = YuqueClientFactory.initClient(getToken());
+    private static final YuqueClient client = YuqueClientFactory.initClient();
 
     public static void main(String[] args) {
         // 加载配置信息
@@ -97,18 +97,5 @@ public class Yuque {
         System.out.println(builder.append("\n——————————————————————\n"));
     }
 
-    private static String getToken() {
-        String token = System.getProperty("token");
-        if (null == token || token.isEmpty()) {
-            Properties properties = new Properties();
-            try {
-                properties.load(new FileReader("token.properties"));
-                return properties.getProperty("token");
-            } catch (IOException e) {
-                throw new RuntimeException("请指定token信息！");
-            }
-        }
 
-        return token;
-    }
 }

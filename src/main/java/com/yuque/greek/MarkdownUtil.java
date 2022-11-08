@@ -55,7 +55,7 @@ public class MarkdownUtil {
         }
     }
 
-    public static void downloadImage(String url, Path picSavePath) {
+    private static void downloadImage(String url, Path picSavePath) {
         try {
             BufferedImage read = ImageIO.read(new URL(url));
             ImageIO.write(read, "png", picSavePath.toFile());
@@ -65,7 +65,7 @@ public class MarkdownUtil {
     }
 
 
-    static class Image {
+    public static class Image {
 
         private String name;
         private String url;
