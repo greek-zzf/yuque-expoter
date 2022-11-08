@@ -20,6 +20,25 @@
 
 在发布页下载压缩好的 jar 包，运行即可。
 
+### 启动参数说明
+
+**必须** 
+
+启动项目的时候必需指定 token 消息
+
+```shell
+java -jar -Dtoken=你的token yuque-exoprt-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+```
+
+**非必须** 
+
+启动参数同样支持设置 markdown 文件导出路径 `mdPath`，和图片存放路径 `picPath` 。默认的 markdown 导出路径为程序运行目录，图片存径路径为
+当前目录的 picture 文件夹。
+
+```shell
+java -jar -DmdPath=xxx -DpicPath=xxx -Dtoken=xxx yuque-exoprt-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+```
+
 ## 已实现
 
 - [x] 语雀仓库的信息获取
