@@ -11,12 +11,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MarkdownUtil {
 
-    private static final Pattern IMAGE_REGEX = Pattern.compile("!\\[(.*)\\]\\((.*)\\)");
+    private static final Pattern IMAGE_REGEX = Pattern.compile("!\\[(.*?)\\]\\((.*?)\\)");
 
     public static List<Image> getAllImage(String markdown) {
         Matcher matcher = IMAGE_REGEX.matcher(markdown);
@@ -33,7 +34,7 @@ public class MarkdownUtil {
 
         Path picSavePath;
         for (Image image : allImage) {
-            picSavePath = Path.of(picPath.toString(), File.separator, doc.getTitle().replaceAll(" ", ""), File.separator, image.getName());
+            picSavePath = Path.of(picPath.toString(), File.separator, doc.getTitle().replaceAll(" ", ""), File.separator, UUID.randomUUID() + ".png");
 
             if (!Files.exists(picSavePath.getParent())) {
                 try {

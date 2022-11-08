@@ -25,7 +25,6 @@ public class MarkdownUtilTest {
     private final String TEST_DOC_SLUG_02 = "vg1kak";
     private static final Integer TEST_REPO_ID = 34925886;
     private final YuqueClient yuqueClient = YuqueClientFactory.initClient();
-
     @Test
     void getAllImageTest() {
         Doc docDetail1 = yuqueClient.getDocDetail(TEST_REPO_ID, TEST_DOC_SLUG_01);
