@@ -7,10 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Yuque {
 
@@ -28,7 +25,6 @@ public class Yuque {
         loadConfig();
 
         System.out.print(("Hello " + client.currentUser.getName() + ", 根据序号选择要导出的仓库"));
-
         while (true) {
             // 打印用户的仓库信息
             printRepoList();
@@ -68,13 +64,18 @@ public class Yuque {
 
     }
 
-    private static boolean isInvalidPath(String path) {
-        if (null != path && !path.isEmpty()) {
-            try {
-                Files.createDirectory(Path.of(path));
+    private static boolean isInvalidPath(String strPath) {
+        if (null != strPath && !strPath.isEmpty()) {
+            Path path = Path.of(strPath);
+            if (Files.exists(path)) {
                 return true;
-            } catch (IOException e) {
-                throw new RuntimeException("请检查文件路径配置！");
+            }else {
+                try {
+                    Files.createDirectory(path);
+                    return true;
+                } catch (IOException e) {
+                    throw new RuntimeException("请检查文件路径配置！");
+                }
             }
         }
         return false;

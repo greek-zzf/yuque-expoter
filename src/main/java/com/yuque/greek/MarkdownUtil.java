@@ -18,6 +18,9 @@ import java.util.regex.Pattern;
 public class MarkdownUtil {
 
     private static final Pattern IMAGE_REGEX = Pattern.compile("!\\[(.*?)\\]\\((.*?)\\)");
+    private static final String ANCHOR_REGEX = "<a name=\".*?\"></a>";
+
+    private static final String BR_TAG_REGEX = "<br />";
 
     public static List<Image> getAllImage(String markdown) {
         Matcher matcher = IMAGE_REGEX.matcher(markdown);
@@ -45,7 +48,9 @@ public class MarkdownUtil {
             }
             downloadImage(image.getUrl(), picSavePath);
 
-            markdown = markdown.replace(image.getUrl(), picSavePath.toString());
+            markdown = markdown.replace(image.getUrl(), picSavePath.toString())
+                    .replaceAll(ANCHOR_REGEX, "")
+                    .replaceAll(BR_TAG_REGEX, System.lineSeparator());
         }
 
         try {
