@@ -58,5 +58,3 @@ java -jar -DmdPath=xxx -DpicPath=xxx -Dtoken=xxx yuque-exoprt-0.0.1-SNAPSHOT-jar
 - [ ] 再次重构优化
 - [ ] java8 实现功能
 - [ ] 语雀锚点格式化
-
-java -jar -DmdPath=xxx -DpicPath=xxx -Dtoken=xxx yuque-exoprt-0.0.1-SNAPSHOT-jar-with-dependencies.jar
