@@ -32,8 +32,8 @@ java -jar -Dtoken=你的token yuque-exoprt-0.0.1-SNAPSHOT-jar-with-dependencies.
 
 **非必须** 
 
-启动参数同样支持设置 markdown 文件导出路径 `mdPath`，和图片存放路径 `picPath` 。默认的 markdown 导出路径为程序运行目录，图片存径路径为
-当前目录的 picture 文件夹。
+启动参数同样支持设置 markdown 文件导出路径 `mdPath`，和图片存放路径 `picPath` 。默认的 markdown 导出路径为程序运行目录，图片路径为
+程序运行目录的 `picture` 文件夹。
 
 ```shell
 java -jar -DmdPath=xxx -DpicPath=xxx -Dtoken=xxx yuque-exoprt-0.0.1-SNAPSHOT-jar-with-dependencies.jar
@@ -57,3 +57,6 @@ java -jar -DmdPath=xxx -DpicPath=xxx -Dtoken=xxx yuque-exoprt-0.0.1-SNAPSHOT-jar
 
 - [ ] 再次重构优化
 - [ ] java8 实现功能
+- [ ] 语雀锚点格式化
+
+java -jar -DmdPath=xxx -DpicPath=xxx -Dtoken=xxx yuque-exoprt-0.0.1-SNAPSHOT-jar-with-dependencies.jar
