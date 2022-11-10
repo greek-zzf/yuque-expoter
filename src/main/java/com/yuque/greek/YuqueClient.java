@@ -12,7 +12,7 @@ public class YuqueClient extends AbstractClient {
     }
 
     public List<Repo> getAllRepos() {
-        final String path = String.format("/users/%s/repos", currentUser.getId());
+        final String path = String.format("/users/%s/repos", currentUser.id());
         return asList(getRequest(path), Repo.class).getData();
     }
 

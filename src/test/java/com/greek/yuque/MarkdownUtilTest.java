@@ -10,9 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -31,11 +29,11 @@ public class MarkdownUtilTest {
     @Test
     void getAllImageTest() {
         Doc docDetail1 = yuqueClient.getDocDetail(TEST_REPO_ID, TEST_DOC_SLUG_01);
-        List<MarkdownUtil.Image> doc01Images = MarkdownUtil.getAllImage(docDetail1.getMarkdownContent());
+        List<MarkdownUtil.Image> doc01Images = MarkdownUtil.getAllImage(docDetail1.markdownContent());
         assertEquals(1, doc01Images.size());
 
         Doc docDetail2 = yuqueClient.getDocDetail(TEST_REPO_ID, TEST_DOC_SLUG_02);
-        List<MarkdownUtil.Image> doc02Images = MarkdownUtil.getAllImage(docDetail2.getMarkdownContent());
+        List<MarkdownUtil.Image> doc02Images = MarkdownUtil.getAllImage(docDetail2.markdownContent());
         assertEquals(1, doc02Images.size());
     }
 
@@ -56,7 +54,7 @@ public class MarkdownUtilTest {
         assertTrue(Files.exists(picDownloadTestPath));
         assertTrue(Files.exists(Path.of(mdDownloadTestPath.toString(), File.separator, "yuque-test-doc-01.md")));
 
-        Path docPicSavePath = Path.of(picDownloadTestPath.toString(), File.separator, doc.getTitle().replaceAll(" ", ""));
+        Path docPicSavePath = Path.of(picDownloadTestPath.toString(), File.separator, doc.title().replaceAll(" ", ""));
         List<Path> picPath;
         try (Stream<Path> paths = Files.walk(docPicSavePath)) {
             picPath = paths.filter(Files::isRegularFile)
@@ -65,7 +63,7 @@ public class MarkdownUtilTest {
         assertEquals(1, picPath.size());
 
         // 验证 md 文件中的路径是否替换成功
-        String downloadedMarkdownContent = Files.readString(Path.of(mdDownloadTestPath.toString(), File.separator, doc.getTitle() + ".md"));
+        String downloadedMarkdownContent = Files.readString(Path.of(mdDownloadTestPath.toString(), File.separator, doc.title() + ".md"));
         Matcher matcher = PIC_REGEX.matcher(downloadedMarkdownContent);
         assertTrue(matcher.find());
 
@@ -74,7 +72,7 @@ public class MarkdownUtilTest {
         );
 
         // 清除生成的临时文件
-//        clenTempFile(mdDownloadTestPath.toFile());
+        clenTempFile(mdDownloadTestPath.toFile());
     }
 
 

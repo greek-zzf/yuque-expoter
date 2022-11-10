@@ -35,11 +35,11 @@ public class YuqueClientTest {
         assertEquals(6, allRepos.size());
 
         Optional<Repo> repo = allRepos.stream()
-                .filter(e -> e.getName().equals("yuque-export-test-repo"))
+                .filter(e -> e.name().equals("yuque-export-test-repo"))
                 .findAny();
 
         assertTrue(repo.isPresent());
-        assertEquals(TEST_REPO_ID, repo.get().getId());
+        assertEquals(TEST_REPO_ID, repo.get().id());
     }
 
     @Test
@@ -48,8 +48,8 @@ public class YuqueClientTest {
 
         Repo repoDetail = yuqueClient.getRepoById(TEST_REPO_ID);
         assertTrue(Objects.nonNull(repoDetail));
-        assertEquals(2, (int) repoDetail.getItemsCount());
-        assertEquals("私有", repoDetail.getState());
+        assertEquals(2, Integer.parseInt(repoDetail.itemsCount()));
+        assertEquals(0, repoDetail.state());
     }
 
     @Test
@@ -59,8 +59,8 @@ public class YuqueClientTest {
         List<Doc> docList = yuqueClient.getDocList(TEST_REPO_ID);
 
         assertEquals(2, docList.size());
-        assertTrue(docList.stream().anyMatch(doc -> doc.getTitle().equals("yuque-test-doc-01")));
-        assertTrue(docList.stream().anyMatch(doc -> doc.getTitle().equals("yuque-doc-test-02")));
+        assertTrue(docList.stream().anyMatch(doc -> doc.title().equals("yuque-test-doc-01")));
+        assertTrue(docList.stream().anyMatch(doc -> doc.title().equals("yuque-doc-test-02")));
     }
 
     @Test
@@ -69,15 +69,15 @@ public class YuqueClientTest {
 
         List<Doc> docList = yuqueClient.getDocList(TEST_REPO_ID);
         List<Doc> docDetails = docList.stream()
-                .map(doc -> yuqueClient.getDocDetail(TEST_REPO_ID, doc.getSlug()))
+                .map(doc -> yuqueClient.getDocDetail(TEST_REPO_ID, doc.slug()))
                 .toList();
 
         docDetails.forEach(this::docVerify);
     }
 
     private void docVerify(Doc doc) {
-        assertTrue(Objects.nonNull(doc.getMarkdownContent()) && !doc.getMarkdownContent().isEmpty());
-        assertEquals(doc.getRepoId(), YuqueClientTest.TEST_REPO_ID);
+        assertTrue(Objects.nonNull(doc.markdownContent()) && !doc.markdownContent().isEmpty());
+        assertEquals(doc.repoId(), YuqueClientTest.TEST_REPO_ID);
     }
 
 

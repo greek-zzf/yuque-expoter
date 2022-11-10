@@ -24,7 +24,7 @@ public class Yuque {
         // 加载配置信息
         loadConfig();
 
-        System.out.print(("Hello " + client.currentUser.getName() + ", 根据序号选择要导出的仓库"));
+        System.out.print(("Hello " + client.currentUser.name() + ", 根据序号选择要导出的仓库"));
         while (true) {
             // 打印用户的仓库信息
             printRepoList();
@@ -88,8 +88,8 @@ public class Yuque {
         int count = 1;
         repoIds = new int[allRepos.size() + 1];
         for (Repo repo : allRepos) {
-            builder.append("\n").append(count).append(". ").append(repo.getName()).append(exportRecords.getOrDefault(repo.getId(), ""));
-            repoIds[count++] = repo.getId();
+            builder.append("\n").append(count).append(". ").append(repo.name()).append(exportRecords.getOrDefault(repo.id(), ""));
+            repoIds[count++] = repo.id();
         }
 
         System.out.println(builder.append("\n——————————————————————\n"));
@@ -105,7 +105,7 @@ public class Yuque {
         }
 
         Repo chooseRepo = client.getRepoById(repoIds[number]);
-        System.out.println("所选择的仓库名称: " + chooseRepo.getName() + " 文章数量: " + chooseRepo.getItemsCount() + " 仓库属性: " + chooseRepo.getState());
+        System.out.println("所选择的仓库名称: " + chooseRepo.name() + " 文章数量: " + chooseRepo.itemsCount() + " 仓库属性: " + chooseRepo.state());
 
         return repoIds[number];
     }
@@ -113,7 +113,7 @@ public class Yuque {
     private static int exportDocsInChoosedRepo(int choosedRepoId) {
         List<Doc> docsInChooseRepo = client.getDocList(choosedRepoId);
         docsInChooseRepo.stream()
-                .map(doc -> client.getDocDetail(choosedRepoId, doc.getSlug()))
+                .map(doc -> client.getDocDetail(choosedRepoId, doc.slug()))
                 .forEach(doc -> MarkdownUtil.downloadMd(doc, mdDownloadPath, picDownloadPath));
 
         return docsInChooseRepo.size();

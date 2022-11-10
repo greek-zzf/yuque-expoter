@@ -32,11 +32,11 @@ public class MarkdownUtil {
     }
 
     public static void downloadMd(Doc doc, Path mdPath, Path picPath) {
-        String markdown = doc.getMarkdownContent().replaceAll(ANCHOR_REGEX, "");
+        String markdown = doc.markdownContent().replaceAll(ANCHOR_REGEX, "");
         List<Image> allImage = getAllImage(markdown);
 
         for (Image image : allImage) {
-            Path picSavePath = Path.of(picPath.toString(), File.separator, doc.getTitle().replaceAll(" ", ""), File.separator, UUID.randomUUID() + ".png");
+            Path picSavePath = Path.of(picPath.toString(), File.separator, doc.title().replaceAll(" ", ""), File.separator, UUID.randomUUID() + ".png");
 
             if (!Files.exists(picSavePath.getParent())) {
                 try {
@@ -50,7 +50,7 @@ public class MarkdownUtil {
             markdown = markdown.replace(image.getUrl(), IS_FULL_PATH ? picSavePath.toString() : mdPath.relativize(picSavePath).toString());
         }
 
-        saveMarkdown(markdown, Path.of(mdPath + File.separator + doc.getTitle() + ".md"));
+        saveMarkdown(markdown, Path.of(mdPath + File.separator + doc.title() + ".md"));
     }
 
     private static void saveMarkdown(String markdownContent, Path mdSavePath) {

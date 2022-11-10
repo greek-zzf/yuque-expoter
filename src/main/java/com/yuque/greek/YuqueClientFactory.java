@@ -1,9 +1,5 @@
 package com.yuque.greek;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Properties;
-
 public class YuqueClientFactory {
 
     private static YuqueClient client;

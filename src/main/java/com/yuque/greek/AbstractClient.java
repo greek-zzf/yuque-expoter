@@ -25,7 +25,7 @@ public class AbstractClient {
     AbstractClient(String accessToken) {
         this.accessToken = accessToken;
         this.currentUser = initUser(accessToken);
-        this.host = "https://${userId}.yuque.com/api/v2".replace("${userId}", currentUser.getId().toString());
+        this.host = "https://${userId}.yuque.com/api/v2".replace("${userId}", String.valueOf(currentUser.id()));
     }
 
 
