@@ -7,7 +7,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Yuque {
 
@@ -18,7 +21,7 @@ public class Yuque {
 
     private static Path picDownloadPath = Path.of(mdDownloadPath.toString(), File.separator + "picture");
 
-    private static final YuqueClient client = YuqueClientFactory.initClient();
+    private static final YuqueClient client = YuqueClient.getInstance();
 
     public static void main(String[] args) {
         // 加载配置信息

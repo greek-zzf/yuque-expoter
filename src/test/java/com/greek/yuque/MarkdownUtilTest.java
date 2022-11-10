@@ -2,7 +2,6 @@ package com.greek.yuque;
 
 import com.yuque.greek.MarkdownUtil;
 import com.yuque.greek.YuqueClient;
-import com.yuque.greek.YuqueClientFactory;
 import com.yuque.greek.entity.Doc;
 import org.junit.jupiter.api.Test;
 
@@ -24,8 +23,7 @@ public class MarkdownUtilTest {
     private final String TEST_DOC_SLUG_01 = "kyclhx";
     private final String TEST_DOC_SLUG_02 = "vg1kak";
     private static final Integer TEST_REPO_ID = 34925886;
-    private final YuqueClient yuqueClient = YuqueClientFactory.initClient();
-
+    private final YuqueClient yuqueClient = YuqueClient.getInstance();
     @Test
     void getAllImageTest() {
         Doc docDetail1 = yuqueClient.getDocDetail(TEST_REPO_ID, TEST_DOC_SLUG_01);
@@ -56,7 +54,9 @@ public class MarkdownUtilTest {
 
         Path docPicSavePath = Path.of(picDownloadTestPath.toString(), File.separator, doc.title().replaceAll(" ", ""));
         List<Path> picPath;
-        try (Stream<Path> paths = Files.walk(docPicSavePath)) {
+
+        Stream<Path> paths = Files.walk(docPicSavePath);
+        try (paths) {
             picPath = paths.filter(Files::isRegularFile)
                     .toList();
         }

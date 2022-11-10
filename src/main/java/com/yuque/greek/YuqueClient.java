@@ -7,8 +7,13 @@ import java.util.List;
 
 public class YuqueClient extends AbstractClient {
 
-    YuqueClient(String accessToken) {
-        super(accessToken);
+    private static YuqueClient client;
+
+    public static YuqueClient getInstance() {
+        if (null == client) {
+            client = new YuqueClient(getToken());
+        }
+        return client;
     }
 
     public List<Repo> getAllRepos() {
@@ -31,5 +36,18 @@ public class YuqueClient extends AbstractClient {
         return asObject(getRequest(path), Doc.class).getData();
     }
 
+
+    private YuqueClient(String accessToken) {
+        super(accessToken);
+    }
+
+    private static String getToken() {
+        String token = System.getProperty("token");
+        if (null == token || token.isEmpty()) {
+            throw new RuntimeException("请指定token信息!");
+        }
+
+        return token;
+    }
 
 }
