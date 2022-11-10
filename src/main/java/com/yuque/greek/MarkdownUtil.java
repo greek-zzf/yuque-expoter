@@ -20,7 +20,7 @@ public class MarkdownUtil {
     private static final Pattern IMAGE_REGEX = Pattern.compile("!\\[(.*?)\\]\\((.*?)\\)");
     private static final String ANCHOR_REGEX = "<a name=\".*?\"></a>";
 
-    private static final String BR_TAG_REGEX = "<br />";
+    private static final boolean IS_FULL_PATH = Boolean.getBoolean("fullPath");
 
     public static List<Image> getAllImage(String markdown) {
         Matcher matcher = IMAGE_REGEX.matcher(markdown);
@@ -32,12 +32,11 @@ public class MarkdownUtil {
     }
 
     public static void downloadMd(Doc doc, Path mdPath, Path picPath) {
-        String markdown = doc.getMarkdownContent();
+        String markdown = doc.getMarkdownContent().replaceAll(ANCHOR_REGEX, "");
         List<Image> allImage = getAllImage(markdown);
 
-        Path picSavePath;
         for (Image image : allImage) {
-            picSavePath = Path.of(picPath.toString(), File.separator, doc.getTitle().replaceAll(" ", ""), File.separator, UUID.randomUUID() + ".png");
+            Path picSavePath = Path.of(picPath.toString(), File.separator, doc.getTitle().replaceAll(" ", ""), File.separator, UUID.randomUUID() + ".png");
 
             if (!Files.exists(picSavePath.getParent())) {
                 try {
@@ -46,22 +45,24 @@ public class MarkdownUtil {
                     throw new RuntimeException("创建图片保存路径 " + picSavePath.getParent() + " 失败！");
                 }
             }
-            downloadImage(image.getUrl(), picSavePath);
+            downloadAndSaveImage(image.getUrl(), picSavePath);
 
-            markdown = markdown.replace(image.getUrl(), picSavePath.toString())
-                    .replaceAll(ANCHOR_REGEX, "")
-                    .replaceAll(BR_TAG_REGEX, System.lineSeparator());
+            markdown = markdown.replace(image.getUrl(), IS_FULL_PATH ? picSavePath.toString() : mdPath.relativize(picSavePath).toString());
         }
 
+        saveMarkdown(markdown, Path.of(mdPath + File.separator + doc.getTitle() + ".md"));
+    }
+
+    private static void saveMarkdown(String markdownContent, Path mdSavePath) {
         try {
-            Files.writeString(Path.of(mdPath + File.separator + doc.getTitle() + ".md"), markdown);
-            System.out.println("导出: " + doc.getTitle() + "成功!");
+            Files.writeString(mdSavePath, markdownContent);
+            System.out.println("导出: " + mdSavePath.getFileName() + "成功!");
         } catch (IOException e) {
             throw new RuntimeException("下载 md 文件失败！");
         }
     }
 
-    private static void downloadImage(String url, Path picSavePath) {
+    private static void downloadAndSaveImage(String url, Path picSavePath) {
         try {
             BufferedImage read = ImageIO.read(new URL(url));
             ImageIO.write(read, "png", picSavePath.toFile());
@@ -69,7 +70,6 @@ public class MarkdownUtil {
             throw new RuntimeException(e);
         }
     }
-
 
     public static class Image {
 
