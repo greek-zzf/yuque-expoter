@@ -4,14 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.kevinsawicki.http.HttpRequest;
 import com.yuque.greek.entity.Result;
 import com.yuque.greek.entity.User;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
 public class AbstractClient {
@@ -30,45 +26,31 @@ public class AbstractClient {
 
 
     protected String getRequest(String path) {
-        HttpRequest request = baseRequestBuilder(path).GET()
-                .build();
-        try {
-            return baseRequest(request);
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
+        HttpRequest request = setYuqueHeader(HttpRequest.get(host + path));
 
-    private String baseRequest(HttpRequest request) throws IOException, InterruptedException {
-        HttpClient httpClient = HttpClient.newHttpClient();
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-        if (200 == response.statusCode()) {
-            return response.body();
+        if (request.ok() && !request.isBodyEmpty()) {
+            return request.body();
         }
 
         throw new RuntimeException("访问失败！");
     }
 
-    private HttpRequest.Builder baseRequestBuilder(String path) {
-        return HttpRequest.newBuilder(URI.create(host + path))
-                .header("Content-Type", "application/json")
+    private HttpRequest setYuqueHeader(HttpRequest request) {
+        return request.header("Content-Type", "application/json")
                 .header("User-Agent", "chrome")
                 .header("X-Auth-Token", accessToken);
     }
 
     private User initUser(String accessToken) {
-        HttpRequest request = HttpRequest.newBuilder(URI.create("https://greek-zzf.yuque.com/api/v2/user"))
+        HttpRequest request = HttpRequest.get("https://greek-zzf.yuque.com/api/v2/user")
                 .header("Content-Type", "application/json")
                 .header("User-Agent", "chrome")
-                .header("X-Auth-Token", accessToken)
-                .build();
-        try {
-            return asObject(baseRequest(request), User.class).getData();
-        } catch (IOException | InterruptedException | RuntimeException e) {
-            throw new RuntimeException("获取用户信息失败，请检查 token 信息!");
-        }
+                .header("X-Auth-Token", accessToken);
 
+        if (request.ok()) {
+            return asObject(request.body(), User.class).getData();
+        }
+        throw new RuntimeException("获取用户信息失败，请检查 token 信息!");
     }
 
     protected <T> Result<List<T>> asList(String response, Class<T> klass) {

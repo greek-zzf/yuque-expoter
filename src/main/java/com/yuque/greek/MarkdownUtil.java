@@ -7,8 +7,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +38,7 @@ public class MarkdownUtil {
         List<Image> allImage = getAllImage(markdown);
 
         for (Image image : allImage) {
-            Path picSavePath = Path.of(picPath.toString(), File.separator, doc.getTitle().replaceAll(" ", ""), File.separator, UUID.randomUUID() + ".png");
+            Path picSavePath = Paths.get(picPath.toString(), File.separator, doc.getTitle().replaceAll(" ", ""), File.separator, UUID.randomUUID() + ".png");
 
             if (!Files.exists(picSavePath.getParent())) {
                 try {
@@ -50,12 +52,12 @@ public class MarkdownUtil {
             markdown = markdown.replace(image.getUrl(), IS_FULL_PATH ? picSavePath.toString() : mdPath.relativize(picSavePath).toString());
         }
 
-        saveMarkdown(markdown, Path.of(mdPath + File.separator + doc.getTitle() + ".md"));
+        saveMarkdown(markdown, Paths.get(mdPath + File.separator + doc.getTitle() + ".md"));
     }
 
     private static void saveMarkdown(String markdownContent, Path mdSavePath) {
         try {
-            Files.writeString(mdSavePath, markdownContent);
+            Files.write(mdSavePath, markdownContent.getBytes(StandardCharsets.UTF_8));
             System.out.println("导出: " + mdSavePath.getFileName() + "成功!");
         } catch (IOException e) {
             throw new RuntimeException("下载 md 文件失败！");
